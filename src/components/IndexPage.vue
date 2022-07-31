@@ -2,9 +2,7 @@
 <template>
   <div class="mainPage">
     <el-container>
-
         <el-header><span><img src="" alt=""></span>天鸽旅客管理系统 </el-header>
-
         <el-container class="bd">
             <el-aside width="200px">
               <Aside></Aside>
@@ -13,11 +11,9 @@
              <router-view></router-view>
             </el-main>
         </el-container>
-
         <el-footer>
           © 2015 - 2022 北京交通大学
         </el-footer>
-
     </el-container>
   </div>
 </template>
@@ -66,7 +62,8 @@ export default {
   background-color: #eef2f6;
   color: #333;
   text-align: center;
-  line-height: 60px;
+  line-height: 30px;
+  height: 30px!important;
 }
 
 .el-aside {
@@ -75,7 +72,6 @@ export default {
 }
 
 .el-main {
- 
   color: #333;
 }
 
