@@ -76,13 +76,15 @@
 </template>
 
 <script>
+import Net from "../js/request.js"
 export default {
     data(){
       return{
         total:1,
         pageSize:1,
         tableData:[],
-        tableBorder:true,  
+        tableBorder:true,
+        nowPage:1,
         formData:{
           birthTime:'',
           minMileage:'',
@@ -93,17 +95,7 @@ export default {
       }
     },
     methods:{
-      queryByBirth(){
-
-      },
-      queryByFlightMileage(){
-        
-      },
-      queryByFlightTime(){
-
-      },
       queryData(){
-          console.log('query')
           for(let i=1;i<=30;i++){
             this.tableData.push({
               id:'123',
@@ -113,13 +105,42 @@ export default {
               flightMileage:'810'
             })
           }
+          Net.queryData({
+              birthTime:this.birthTime,
+              minMileage:this.minMileage,
+              maxMileage:this.maxMileage,
+              minFlightTime:this.minFlightTime,
+              maxFlightTime:this.maxFlightTime,
+              nowPage:this.nowPage
+          })
+          .then((res)=>{
+              console.log(res);
+          })
+          
       },
       clear(){
-        console.log('clear')
+        this.total = 0;
+        this.tableData = [];
+        this.formData.birthTime='';
+        this.formData.minMileage='';
+        this.formData.maxMileage='';
+        this.formData.minFlightTime='';
+        this.formData.maxFlightTime='';
+
       },
       currentChange(e){
           this.nowPage = e;
-          this.queryByBirth();
+          Net.queryData({
+              birthTime:this.birthTime,
+              minMileage:this.minMileage,
+              maxMileage:this.maxMileage,
+              minFlightTime:this.minFlightTime,
+              maxFlightTime:this.maxFlightTime,
+              pageNum:this.nowPage
+          })
+          .then((res)=>{
+              console.log(res);
+          })
       }
     }
 }
