@@ -2,15 +2,15 @@
 <template>
   <div class="main">
     <el-form :model="formData" label-width="80px">
-        <el-form-item label="年龄">
+        <el-form-item label="出生年份">
           <el-col :span="1">
-            <el-input v-model="formData.age" size="mini"></el-input>
+            <el-input v-model="formData.birth" size="mini"></el-input>
           </el-col>
         </el-form-item>
         <el-form-item label="性别">
-          <el-radio-group v-model="formData.gender">
-            <el-radio label="男"></el-radio>
-            <el-radio label="女"></el-radio>
+          <el-radio-group v-model="formData.sex">
+            <el-radio label="1">男</el-radio>
+            <el-radio label="0">女</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="旅行里程">
@@ -32,12 +32,13 @@
 </template>
 
 <script>
+import Net from "../js/request.js"
 export default {
     data(){
       return{
         formData:{
-          age:'',
-          gender:'',
+          birth:'',
+          sex:'',
           mileage:'',
           flightTime:''
         }
@@ -45,11 +46,27 @@ export default {
     },
     methods:{
       onSubmit(){
+        for(var i in this.formData){
+            if(i==''){
+              alert('请填写完整在提交！')
+              return;
+            }
+
+        }
+        Net.addData({
+          sex:this.formData.sex,
+          birth:this.formData.birth,
+          mileage:this.formData.mileage,
+          flightTime:this.formData.flightTime
+        })
+        .then((res)=>{
+          console.log(res);
+        })
         alert('已提交');
         this.clear();
       },
       clear(){
-        this.formData.age='';
+        this.formData.birth='';
         this.formData.gender='';
         this.formData.mileage='';
         this.formData.flightTime='';

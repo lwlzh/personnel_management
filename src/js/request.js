@@ -1,17 +1,19 @@
 import axios from "axios"
 const host = "http://localhost:8088/management"
 export default {
-    async myPost(api,data){
+    async myPost(api,postData){
         const res = await axios({
             url:host + api,
             headers:{
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json;charset=UTF-8'
             },
             method:'post',
-            data:data
+            data:postData
         }).catch(function(e){
             alert(e.message)
+            return e.message;
         })
+        
         return res.data;
     }
     ,
@@ -21,6 +23,7 @@ export default {
         return this.myPost(api,data);
     },
     addData(postData){
+        console.log(postData);
         const api = '/addData';
         const data = JSON.stringify(postData);
         return this.myPost(api,data);

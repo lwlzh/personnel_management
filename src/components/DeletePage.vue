@@ -4,7 +4,7 @@
       <el-form :model="formData" label-width="80px">
         <el-form-item label="旅客id">
           <el-col :span="1">
-            <el-input v-model="formData.id" size="mini"></el-input>
+            <el-input v-model="formData.uerId" size="mini"></el-input>
           </el-col>
         </el-form-item>
         <el-form-item>
@@ -16,11 +16,12 @@
 </template>
 
 <script>
+import Net from "../js/request.js"
 export default {
   data(){
       return{
         formData:{
-          id:'',
+          uerId:'',
         }
       }
     },
@@ -30,11 +31,17 @@ export default {
           alert('请输入旅客id！')
           return;
         }
+        Net.deleteData({
+          userId:this.formData.uerId
+        })
+        .then((res)=>{
+          console.log(res);
+        })
         alert('已提交');
         this.clear();
       },
       clear(){
-        this.formData.id='';
+        this.formData.uerId='';
       }
     }
 }

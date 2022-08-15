@@ -26,24 +26,6 @@
                         </el-menu-item-group>
                     </el-submenu>
                 </el-menu>
-                <!-- 个人中心 -->
-                <el-menu
-                default-active="2"
-                class="el-menu-vertical-demo"
-                @open="handleOpen"
-                @close="handleClose"
-                >
-                    <el-submenu index="2">
-                        <template slot="title">
-                        <i class="el-icon-menu"></i>
-                        <span>个人中心</span>
-                        </template>
-                        <el-menu-item-group>
-                            <el-menu-item index="2-1">个人信息</el-menu-item>
-                            <el-menu-item index="2-2">修改账号信息</el-menu-item>
-                        </el-menu-item-group>
-                    </el-submenu>
-                </el-menu>
             </el-col>
         </el-row>
         

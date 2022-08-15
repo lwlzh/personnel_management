@@ -5,9 +5,13 @@
       <span style="text-aligin:center">旅客查询</span>
       <el-form :inline="true" :model="formData" class="demo-form-inline"  size="mini">
         <el-form-item label="出生年份:">
-          <el-col :span="12">
-              <el-input v-model="formData.birthTime" placeholder="出生年份"></el-input>
+          <el-col :span="10">
+              <el-input v-model="formData.minBirthTime" placeholder="最小年份"></el-input>
           </el-col>
+          <el-col  :span="2">---</el-col>
+            <el-col  :span="10">
+              <el-input v-model="formData.maxBirthTime" placeholder="最大年份"></el-input>
+            </el-col>
         </el-form-item>
         <el-form-item label="旅行里程:">
           <el-col>
@@ -48,15 +52,21 @@
         :cell-style="{textAlign:'center',background:'rgba(246,246,246,0.5)',borderColor:'rgba(0,0,0,0.5)'}"
         >
             <!-- 表头 -->
-            <el-table-column prop="id" label="人员 ID" width="180">
+            <el-table-column prop="userId" label="人员 ID" width="180">
             </el-table-column>
-            <el-table-column prop="gender" label="性别" width="180">
+            <el-table-column prop="sex" label="性别" width="180">
             </el-table-column>
-            <el-table-column prop="birthTime" label="出生年份">
+            <el-table-column prop="birth" label="出生年份">
             </el-table-column>
-            <el-table-column prop="flightMileage" label="总旅行里程">
+            <el-table-column prop="mileage" label="总旅行里程">
             </el-table-column>
             <el-table-column prop="flightTime" label="总旅行时间">
+            </el-table-column>
+            <el-table-column fixed="right" label="操作" width="100px">
+              <template slot-scope="scope">
+                <el-button @click="updateData(scope.row)" type="text" size="small">修改</el-button>
+                <el-button @click="deleteData(scope.row)" type="text" size="small">删除</el-button>
+              </template>  
             </el-table-column>
         </el-table>
     </div>
@@ -81,66 +91,74 @@ export default {
     data(){
       return{
         total:1,
+        // 页码总数
         pageSize:1,
         tableData:[],
         tableBorder:true,
         nowPage:1,
+        // 页大小
+        pageNum:20,
         formData:{
-          birthTime:'',
+          minBirthTime:'',
+          maxBirthTime:'',
           minMileage:'',
           maxMileage:'',
           minFlightTime:'',
-          maxFlightTime:''
+          maxFlightTime:'',
+          
         }
       }
     },
     methods:{
       queryData(){
-          for(let i=1;i<=30;i++){
-            this.tableData.push({
-              id:'123',
-              gender:'男',
-              birthTime:'1919',
-              flightTime:'1145',
-              flightMileage:'810'
-            })
+          var qData = {
+            minBirthTime:this.formData.minBirthTime,
+            maxBirthTime:this.formData.maxBirthTime,
+            minMileage:this.formData.minMileage,
+            maxMileage:this.formData.maxMileage,
+            minFlightTime:this.formData.minFlightTime,
+            maxFlightTime:this.formData.maxFlightTime,
+            nowPage:this.nowPage,
+            // pageSize被el组件占用了
+            pageSize:this.pageNum
           }
-          Net.queryData({
-              birthTime:this.birthTime,
-              minMileage:this.minMileage,
-              maxMileage:this.maxMileage,
-              minFlightTime:this.minFlightTime,
-              maxFlightTime:this.maxFlightTime,
-              nowPage:this.nowPage
-          })
+          for(var i in qData){
+            qData[i] = (qData[i]=='') ? -1 : qData[i];
+          }
+          Net.queryData(qData)
           .then((res)=>{
               console.log(res);
+              if(res.code != 200){
+                alert(res.data);
+                return;
+              }
+              this.tableData = res.data.list;
+              this.total = res.data.total;
+              this.pageSize = res.data.pageSize;
           })
           
       },
       clear(){
         this.total = 0;
         this.tableData = [];
-        this.formData.birthTime='';
+        this.formData.minBirthTime='';
+        this.formData.maxBirthTime='';
         this.formData.minMileage='';
         this.formData.maxMileage='';
         this.formData.minFlightTime='';
         this.formData.maxFlightTime='';
+        this.pageSize=1;
 
       },
       currentChange(e){
           this.nowPage = e;
-          Net.queryData({
-              birthTime:this.birthTime,
-              minMileage:this.minMileage,
-              maxMileage:this.maxMileage,
-              minFlightTime:this.minFlightTime,
-              maxFlightTime:this.maxFlightTime,
-              pageNum:this.nowPage
-          })
-          .then((res)=>{
-              console.log(res);
-          })
+          this.queryData();
+      },
+      updateData(row){
+          console.log(row);
+      },
+      deleteData(row){
+        console.log(row);
       }
     }
 }
