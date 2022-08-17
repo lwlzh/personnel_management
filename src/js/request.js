@@ -1,5 +1,5 @@
 import axios from "axios"
-const host = "http://localhost:8088/management"
+const host = "http://localhost:80"
 export default {
     async myPost(api,postData){
         const res = await axios({

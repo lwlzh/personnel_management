@@ -1,9 +1,9 @@
 <!-- eslint-disable vue/valid-template-root -->
 <template>
   <div class="main">
-    <el-form :model="formData" label-width="80px">
-        <el-form-item label="出生年份">
-          <el-col :span="1">
+    <el-form :model="formData" >
+        <el-form-item label="出生年份" >
+          <el-col :span="3">
             <el-input v-model="formData.birth" size="mini"></el-input>
           </el-col>
         </el-form-item>
@@ -14,12 +14,12 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="旅行里程">
-          <el-col :span="1">
+          <el-col :span="3">
             <el-input v-model="formData.mileage" size="mini"></el-input>
           </el-col>
         </el-form-item>
         <el-form-item label="旅行时间">
-          <el-col :span="1">
+          <el-col :span="3">
             <el-input v-model="formData.flightTime" size="mini"></el-input>
           </el-col>
         </el-form-item>
@@ -47,11 +47,10 @@ export default {
     methods:{
       onSubmit(){
         for(var i in this.formData){
-            if(i==''){
+            if(typeof(this.formData[i])==typeof('')&&this.formData[i]==''){
               alert('请填写完整在提交！')
               return;
             }
-
         }
         Net.addData({
           sex:this.formData.sex,
@@ -79,5 +78,6 @@ export default {
 .main{
     width: 100%;
     height: 100%;
+    margin: 0 auto;
 }
 </style>

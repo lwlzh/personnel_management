@@ -21,8 +21,6 @@
                         <el-menu-item-group>
                             <el-menu-item index="/QueryPage">查询旅客信息</el-menu-item>
                             <el-menu-item index="/AddPage">添加旅客信息</el-menu-item>
-                            <el-menu-item index="/UpdatePage">修改旅客信息</el-menu-item>
-                            <el-menu-item index="/DeletePage">删除旅客信息</el-menu-item>
                         </el-menu-item-group>
                     </el-submenu>
                 </el-menu>

@@ -62,13 +62,33 @@
             </el-table-column>
             <el-table-column prop="flightTime" label="总旅行时间">
             </el-table-column>
-            <el-table-column fixed="right" label="操作" width="100px">
+            <el-table-column fixed="right" label="操作">
               <template slot-scope="scope">
-                <el-button @click="updateData(scope.row)" type="text" size="small">修改</el-button>
-                <el-button @click="deleteData(scope.row)" type="text" size="small">删除</el-button>
+                <el-button type="primary" @click="clickDialog(scope.row)" size="small">修改</el-button>
+                <el-popconfirm
+                    title="确定删除吗？"
+                    @confirm="deleteData(scope.row)"
+                  >
+                    <el-button type="danger" size="small" slot="reference">删除</el-button>
+                </el-popconfirm>
               </template>  
             </el-table-column>
         </el-table>
+        <el-dialog
+          title="修改"
+          :visible.sync="dialogVisible"
+          append-to-body
+          width="30%"
+          @open="openDialog()"       
+          >
+          <UpdatePage 
+            ref="UpdatePage"
+            :parentCloseDialog="closeDialog"
+            :parentUpdate="queryData"
+            destory-on-close="true"
+            >
+          </UpdatePage>
+      </el-dialog>
     </div>
       <!-- 页码 -->
       <div class="pageNum">
@@ -87,80 +107,104 @@
 
 <script>
 import Net from "../js/request.js"
+import UpdatePage from "./UpdatePage.vue";
 export default {
-    data(){
-      return{
-        total:1,
-        // 页码总数
-        pageSize:1,
-        tableData:[],
-        tableBorder:true,
-        nowPage:1,
-        // 页大小
-        pageNum:20,
-        formData:{
-          minBirthTime:'',
-          maxBirthTime:'',
-          minMileage:'',
-          maxMileage:'',
-          minFlightTime:'',
-          maxFlightTime:'',
-          
-        }
-      }
+    data() {
+        return {
+            dialogVisible: false,
+            total: 1,
+            // 页码总数
+            pageSize: 1,
+            tableData: [],
+            tableBorder: true,
+            nowPage: 1,
+            // 页大小
+            pageNum: 20,
+            rowData:'',
+            formData: {
+                minBirthTime: "",
+                maxBirthTime: "",
+                minMileage: "",
+                maxMileage: "",
+                minFlightTime: "",
+                maxFlightTime: "",
+            }
+        };
     },
-    methods:{
-      queryData(){
-          var qData = {
-            minBirthTime:this.formData.minBirthTime,
-            maxBirthTime:this.formData.maxBirthTime,
-            minMileage:this.formData.minMileage,
-            maxMileage:this.formData.maxMileage,
-            minFlightTime:this.formData.minFlightTime,
-            maxFlightTime:this.formData.maxFlightTime,
-            nowPage:this.nowPage,
-            // pageSize被el组件占用了
-            pageSize:this.pageNum
-          }
-          for(var i in qData){
-            qData[i] = (qData[i]=='') ? -1 : qData[i];
-          }
-          Net.queryData(qData)
-          .then((res)=>{
-              console.log(res);
-              if(res.code != 200){
-                alert(res.data);
-                return;
-              }
-              this.tableData = res.data.list;
-              this.total = res.data.total;
-              this.pageSize = res.data.pageSize;
+    methods: {
+        queryData() {
+            var qData = {
+                minBirthTime: this.formData.minBirthTime,
+                maxBirthTime: this.formData.maxBirthTime,
+                minMileage: this.formData.minMileage,
+                maxMileage: this.formData.maxMileage,
+                minFlightTime: this.formData.minFlightTime,
+                maxFlightTime: this.formData.maxFlightTime,
+                nowPage: this.nowPage,
+                // pageSize被el组件占用了
+                pageSize: this.pageNum
+            };
+            for (var i in qData) {
+                qData[i] = (qData[i] == "") ? -1 : qData[i];
+            }
+            Net.queryData(qData)
+                .then((res) => {
+                console.log(res);
+                if (res.code != 200) {
+                    alert(res.data);
+                    return;
+                }
+                this.tableData = res.data.list;
+                this.total = res.data.total;
+                this.pageSize = res.data.pageSize;
+            });
+        },
+        clear() {
+            this.total = 0;
+            this.tableData = [];
+            this.formData.minBirthTime = "";
+            this.formData.maxBirthTime = "";
+            this.formData.minMileage = "";
+            this.formData.maxMileage = "";
+            this.formData.minFlightTime = "";
+            this.formData.maxFlightTime = "";
+            this.pageSize = 1;
+        },
+        currentChange(e) {
+            this.nowPage = e;
+            this.queryData();
+        },
+        deleteData(row) {
+            // console.log(row);
+            Net.deleteData({
+                userId: row.userId
+            })
+                .then((res) => {
+                this.queryData();
+                alert("删除成功");
+                console.log(res);
+            });
+        },
+        closeDialog(){
+          this.dialogVisible = false;
+        },
+        openDialog(){
+          console.log(this.rowData);
+          this.$nextTick(() => {
+              this.$refs.UpdatePage.formData.userId=this.rowData.userId;
+              this.$refs.UpdatePage.formData.sex=this.rowData.sex;
+              this.$refs.UpdatePage.formData.birth=this.rowData.birth;
+              this.$refs.UpdatePage.formData.mileage=this.rowData.mileage;
+              this.$refs.UpdatePage.formData.flightTime=this.rowData.flightTime;
           })
           
-      },
-      clear(){
-        this.total = 0;
-        this.tableData = [];
-        this.formData.minBirthTime='';
-        this.formData.maxBirthTime='';
-        this.formData.minMileage='';
-        this.formData.maxMileage='';
-        this.formData.minFlightTime='';
-        this.formData.maxFlightTime='';
-        this.pageSize=1;
-
-      },
-      currentChange(e){
-          this.nowPage = e;
-          this.queryData();
-      },
-      updateData(row){
-          console.log(row);
-      },
-      deleteData(row){
-        console.log(row);
-      }
-    }
+        },
+        clickDialog(row){
+            this.rowData=row;
+            this.dialogVisible=true;
+        }
+    },
+    components: { UpdatePage }
 }
 </script>
 
