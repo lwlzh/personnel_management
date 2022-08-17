@@ -16,11 +16,10 @@
                     <el-submenu index="1">
                         <template slot="title">
                             <i class="el-icon-menu"></i>
-                            <span>旅客管理</span>
+                            <span>管理系统</span>
                         </template>
                         <el-menu-item-group>
-                            <el-menu-item index="/QueryPage">查询旅客信息</el-menu-item>
-                            <el-menu-item index="/AddPage">添加旅客信息</el-menu-item>
+                            <el-menu-item index="/QueryPage">旅客信息管理</el-menu-item>
                         </el-menu-item-group>
                     </el-submenu>
                 </el-menu>
@@ -55,5 +54,8 @@ export default {
     padding-left: 10px;
     height: 40px;
     line-height: 40px;
+}
+.aside{
+    height: 100%;
 }
 </style>

@@ -2,9 +2,10 @@
 <template>
   <div class="main">
     <el-form :model="formData" >
+        
         <el-form-item label="出生年份" >
           <el-col :span="3">
-            <el-input v-model="formData.birth" size="mini"></el-input>
+            <el-input v-model="formData.birth" maxlength="4" size="mini"></el-input>
           </el-col>
         </el-form-item>
         <el-form-item label="性别">
@@ -15,12 +16,12 @@
         </el-form-item>
         <el-form-item label="旅行里程">
           <el-col :span="3">
-            <el-input v-model="formData.mileage" size="mini"></el-input>
+            <el-input v-model="formData.mileage" maxlength="8" size="mini"></el-input>
           </el-col>
         </el-form-item>
         <el-form-item label="旅行时间">
           <el-col :span="3">
-            <el-input v-model="formData.flightTime" size="mini"></el-input>
+            <el-input v-model="formData.flightTime"  maxlength="8" size="mini"></el-input>
           </el-col>
         </el-form-item>
         <el-form-item>
@@ -34,6 +35,20 @@
 <script>
 import Net from "../js/request.js"
 export default {
+    props:{
+      parentCloseDialog:{
+        type: Function,
+        default:()=>{
+          
+        }
+      },
+      parentUpdate:{
+        type: Function,
+        default:()=>{
+          
+        }
+      },
+    },
     data(){
       return{
         formData:{
@@ -45,6 +60,19 @@ export default {
       }
     },
     methods:{
+      successNotif(mes) {
+          this.$notify({
+            title: '成功',
+            message: mes,
+            type: 'success'
+          });
+        },
+        errorNotif(mes) {
+          this.$notify.error({
+            title: '失败',
+            message: mes
+          });
+        },
       onSubmit(){
         for(var i in this.formData){
             if(typeof(this.formData[i])==typeof('')&&this.formData[i]==''){
@@ -59,10 +87,21 @@ export default {
           flightTime:this.formData.flightTime
         })
         .then((res)=>{
-          console.log(res);
+          if (res.code == "error") {
+              this.errorNotif('添加时网络连接错误');
+              return;
+          }
+          res=res.data;
+          if(res.code != "200"){
+              this.errorNotif(res.data);
+              return;
+          }
+          this.successNotif('添加成功');
+          this.clear();
+          this.parentCloseDialog();
+          this.parentUpdate();
         })
-        alert('已提交');
-        this.clear();
+        
       },
       clear(){
         this.formData.birth='';

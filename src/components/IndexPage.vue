@@ -2,7 +2,7 @@
 <template>
   <div class="mainPage">
     <el-container>
-        <el-header><span><img src="" alt=""></span>天鸽旅客管理系统 </el-header>
+        <el-header><span><img src="" alt=""></span>旅客管理系统 </el-header>
         <el-container class="bd">
             <el-aside width="200px">
               <Aside></Aside>
@@ -11,9 +11,9 @@
              <router-view></router-view>
             </el-main>
         </el-container>
-        <el-footer>
+        <!-- <el-footer>
           © 2015 - 2022 北京交通大学
-        </el-footer>
+        </el-footer> -->
     </el-container>
   </div>
 </template>
@@ -24,7 +24,6 @@ import Aside from './Aside.vue'
 import QueryPage from './QueryPage.vue'
 import AddPage from './AddPage.vue'
 import UpdatePage from './UpdatePage.vue'
-import DeletePage from './DeletePage.vue'
 
 export default {
     components:{
@@ -35,8 +34,6 @@ export default {
       AddPage,
       // eslint-disable-next-line vue/no-unused-components
       UpdatePage,
-      // eslint-disable-next-line vue/no-unused-components
-      DeletePage,
       // eslint-disable-next-line vue/no-unused-components
     }
   

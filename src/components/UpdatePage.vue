@@ -9,7 +9,7 @@
         </el-form-item>
         <el-form-item label="出生年份">
           <el-col :span="12">
-            <el-input v-model="formData.birth" size="mini"></el-input>
+            <el-input v-model="formData.birth" maxlength="4" size="mini"></el-input>
           </el-col>
         </el-form-item>
         <el-form-item label="性别">
@@ -20,12 +20,12 @@
         </el-form-item>
         <el-form-item label="旅行里程">
           <el-col :span="12">
-            <el-input v-model="formData.mileage" size="mini"></el-input>
+            <el-input v-model="formData.mileage" size="mini" maxlength="8"></el-input>
           </el-col>
         </el-form-item>
         <el-form-item label="旅行时间">
           <el-col :span="12">
-            <el-input v-model="formData.flightTime" size="mini"></el-input>
+            <el-input v-model="formData.flightTime" size="mini" maxlength="8"></el-input>
           </el-col>
         </el-form-item>
         <el-form-item>
@@ -65,6 +65,19 @@ export default {
       }
     },
     methods:{
+      successNotif(mes) {
+          this.$notify({
+            title: '成功',
+            message: mes,
+            type: 'success'
+          });
+        },
+        errorNotif(mes) {
+          this.$notify.error({
+            title: '失败',
+            message: mes
+          });
+        },
       onSubmit(){
         var uData={
           userId:this.formData.userId,
@@ -81,12 +94,27 @@ export default {
         }
         Net.updateData(uData)
         .then((res)=>{
+          // 判断服务器出错
+          if(res.code =='error'){
+            this.errorNotif('修改时网络连接出错');
+            return;
+          }
+          // 判断修改过程出错
+          res= res.data;
+          if(res.code != "200"){
+            this.errorNotif(res.data);
+            return;
+          }
+          this.successNotif('修改成功');
+          this.clear();
+          this.parentCloseDialog();
+          this.parentUpdate();
+        })
+        .catch((res)=>{
+          this.errorNotif('修改失败');
           console.log(res);
         })
-        alert('已提交');
-        this.clear();
-        this.parentCloseDialog();
-        this.parentUpdate();
+        
       },
       clear(){
         this.formData.birth='';

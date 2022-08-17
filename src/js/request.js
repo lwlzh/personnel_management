@@ -10,11 +10,10 @@ export default {
             method:'post',
             data:postData
         }).catch(function(e){
-            alert(e.message)
-            return e.message;
+            return {code:"error",data:e.message};
         })
         
-        return res.data;
+        return {code:"success",data:res.data};
     }
     ,
     queryData(postData){
