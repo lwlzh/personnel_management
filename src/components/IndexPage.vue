@@ -11,9 +11,9 @@
              <router-view></router-view>
             </el-main>
         </el-container>
-        <!-- <el-footer>
-          © 2015 - 2022 北京交通大学
-        </el-footer> -->
+        <el-footer>
+          <span>© 2015 - 2022 北京交通大学</span>    
+        </el-footer>
     </el-container>
   </div>
 </template>
@@ -43,7 +43,7 @@ export default {
 <style scoped>
 .mainPage{
    width: 100%;
-   height: 100%;
+   height: 100vh;
 }
 .el-header {
   background-color: #7accff;
@@ -52,7 +52,6 @@ export default {
   font-size: 20px;
 }
 .bd {
-  height:600px;
   width: 100%;
 }
 .el-footer {
@@ -61,8 +60,11 @@ export default {
   text-align: center;
   line-height: 30px;
   height: 30px!important;
+  
 }
-
+.el-container{
+    height: 100%;
+}
 .el-aside {
   color: #333;
    background-color: rgba(224,229,223,0.3);

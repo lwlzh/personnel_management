@@ -48,7 +48,7 @@
           </el-form-item>
           <el-button  @click.prevent="removeDomain(domain)">删除</el-button>
         </el-form-item>
-        <el-form-item style="display:block">
+        <el-form-item style="display:block" class="btn">
                      <!-- 控制按钮 -->
           <el-button type="primary" @click="queryData">查询</el-button>
           <el-button type="primary" @click="addDomain">添加查询分类</el-button>
@@ -121,7 +121,7 @@
                   </el-table-column>
                   <el-table-column fixed="right" label="操作">
                     <template slot-scope="scope">
-                      <el-button type="primary" @click="clickUpdateDialog(scope.row)" size="small">修改</el-button>
+                      <el-button type="primary" @click="clickUpdateDialog(scope.row)" size="small" style="margin-right:10px">修改</el-button>
                       <el-popconfirm
                           title="确定删除吗？"
                           @confirm="deleteData(scope.row,index)"
@@ -245,7 +245,7 @@ export default {
         queryData() {
             for(var i=0;i< this.formData.domains.length;i++){
               if(this.formData.domains[i].minBirthTime!="" &&this.formData.domains[i].maxBirthTime!="" && this.formData.domains[i].minBirthTime>this.formData.domains[i].maxBirthTime){
-                alert('分类'+i+'的[出生年份]最小值能大于最大值！');
+                alert('分类'+i+'的[出生年份]最小值不能大于最大值！');
 
                 return;
               }
@@ -419,6 +419,10 @@ export default {
 .el-pagination{
   text-align: center;
   margin-top: 20px;
+  height: 100%;
+}
+.main .queryBlock .btn{
+  padding-bottom: 10px;
 }
 
 </style>
