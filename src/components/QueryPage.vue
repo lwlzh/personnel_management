@@ -180,12 +180,10 @@ export default {
                 title:'分类0',
                 name:"0",
                 total: 1,
-                // 页码总数
-                pageSize: 1,
+                // 每页显示个数
+                pageSize: 20,
                 tableData: [],
                 nowPage: 1,
-                // 页大小
-                pageNum: 20,
             }],
             tabIndex: 2
         };
@@ -214,11 +212,11 @@ export default {
                   minFlightTime:  this.formData.domains[index].minFlightTime,
                   maxFlightTime:  this.formData.domains[index].maxFlightTime,
                   nowPage: this.editableTabs[index].nowPage,
-                  // pageSize被el组件占用了
-                  pageSize: this.editableTabs[index].pageNum
+                  //每页显示个数
+                  pageSize: this.editableTabs[index].pageSize
           }
           for (var qDataItem in qData) {
-                qData[qDataItem] = (qData[qDataItem] == "") ? -1 : qData[qDataItem];
+                qData[qDataItem] = (qData[qDataItem] == "") ? -1: qData[qDataItem];
           }
 
           Net.queryData(qData)
@@ -232,14 +230,14 @@ export default {
                   this.errorNotif('查询['+title+']时'+res.data);
                   return;
               }
+              // console.log(res);
               this.editableTabs[index].tableData = res.data.list;
               this.editableTabs[index].total = res.data.total;
-              this.editableTabs[index].pageSize = res.data.pageSize;
               this.successNotif('查询['+title+']时查询成功');
             })
             .catch((e)=>{
               console.log(e);
-              this.errorNotif('查询['+title+']时网络连接错误');
+              this.errorNotif('查询['+title+']时出错');
             })
         },
         queryData() {
@@ -269,12 +267,9 @@ export default {
                     title: this.formData.domains[i].categoryName=="" ? ("分类"+i) : this.formData.domains[i].categoryName,
                     name:i+"",
                     total: 1,
-                    // 页码总数
-                    pageSize: 1,
+                    pageSize: 20,
                     tableData: [],
                     nowPage: 1,
-                    // 页大小
-                    pageNum: 20,
                 })
                this.queryItem(i);
             }

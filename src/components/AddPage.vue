@@ -101,6 +101,10 @@ export default {
           this.parentCloseDialog();
           this.parentUpdate();
         })
+        .catch((e)=>{
+          console.log(e);
+           this.errorNotif('添加时出错');
+        })
         
       },
       clear(){

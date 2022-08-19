@@ -4,7 +4,7 @@
         <el-row class="tac">
             
             <el-col :span="24">
-                <h5 class="welcome">欢迎您，{{username}} !</h5>
+                <h5 class="welcome">欢迎使用!</h5>
                  <!-- 旅客管理 -->
                 <el-menu
                 router
@@ -42,7 +42,6 @@ export default {
     },
      data(){
             return {
-                username:'张三',
                 router:router
             }
     }
